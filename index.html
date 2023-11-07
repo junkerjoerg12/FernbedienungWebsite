@@ -10,65 +10,67 @@
     />
     <meta name="viewport" content="width-device, initial-scale=1.0" />
     <meta charset="UTF-8" />
+
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <h1>Fernbedienung ansteuern</h1>
+    <h1 id="ueberschrift">Fernbedienung ansteuern</h1>
 
-    <!--This is a comment -->
     <!--horizontale linie-->
     <hr />
-    <p>
-      <button onclick="doSomething()">An</button>
-      <button onclick="doSomething()">Aus</button>
-      <button onclick="doSomething()">Freeze</button>
-      <button onclick="doSomething()">*</button>
 
-      <br />
+    <div id="knoepfe">
+      <p id="Reihe1">
+        <button class="knopf" onclick="doSomething()">An</button>
+        <button class="knopf" onclick="doSomething()">Aus</button>
+        <button class="knopf" onclick="doSomething()">Freeze</button>
+        <button class="knopf" onclick="doSomething()">*</button>
+      </p>
 
-      <button onclick="doSomething()">An</button>
-      <button onclick="doSomething()">Aus</button>
-      <button onclick="doSomething()">Freeze</button>
-      <button onclick="doSomething()">*</button>
+      <p id="Reihe2">
+        <button class="knopf" onclick="doSomething()">An</button>
+        <button class="knopf" onclick="doSomething()">Aus</button>
+        <button class="knopf" onclick="doSomething()">Freeze</button>
+        <button class="knopf" onclick="doSomething()">*</button>
+      </p>
 
-      <br />
+      <p id="Reihe3">
+        <button class="knopf" onclick="doSomething()">An</button>
+        <button class="knopf" onclick="doSomething()">Aus</button>
+        <button class="knopf" onclick="doSomething()">Freeze</button>
+        <button class="knopf" onclick="doSomething()">*</button>
+      </p>
 
-      <button onclick="doSomething()">An</button>
-      <button onclick="doSomething()">Aus</button>
-      <button onclick="doSomething()">Freeze</button>
-      <button onclick="doSomething()">*</button>
+      <p id="Reihe4">
+        <button class="knopf" onclick="doSomething()">An</button>
+        <button class="knopf" onclick="doSomething()">Aus</button>
+        <button class="knopf" onclick="doSomething()">Freeze</button>
+        <button class="knopf" onclick="doSomething()">*</button>
+      </p>
+    </div>
 
-      <br />
-
+    <p id="auswaehlen">
       <button onclick="doSomething()">Umbenennen</button>
       <button onclick="doSomething()">Ausführen</button>
-
-      <br>
-      
-      <form>
-        <div>
-          <label for="neuerName">Neuer Name:</label>
-          <input
-            type="text"
-            id="frame"
-            name=" neuerName"
-            placeholder="Computer 1"
-          />
-        </div>
-  
-        <br />
-  
-        <div>
-          <input type="reset" />
-        </div>
-  
-        <br />
-  
-        <div>
-          <input type="submit" />
-        </div>
-      </form>
     </p>
+
+    <div id="umbenennen">
+      <form>
+        <label id="FeldNamen" for="neuerName">Neuer Name:</label>
+        <input
+          type="text"
+          id="frame"
+          name=" neuerName"
+          placeholder="Computer 1"
+        />
+        <br />
+
+        <input type="reset" />
+
+        <input type="submit" />
+      </form>
+    </div>
 
     <!--paragraph-->
 
