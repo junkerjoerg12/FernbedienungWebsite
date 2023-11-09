@@ -10,11 +10,14 @@ body {
 h1 {
   color: white;
 }
-#Reihe1 {
-}
 
 .knopf {
-  width: 60px;
+  width: fit-content;
+  border-style: solid;
+  border-color: black;
+  border-width: 5px;
+  border-radius: 10px;
+  padding: 5px;
 }
 
 #knoepfe {
@@ -44,4 +47,20 @@ h1 {
 }
 #FeldNamen {
   margin-bottom: 10px;
+}
+#knopfUmbenennen {
+  border-width: 3px;
+  border-style: solid;
+  border-color: black;
+  background-color: lightgray;
+  border-radius: 7px;
+  padding: 5px;
+}
+#knopfAusfuehren {
+  border-width: 3px;
+  border-style: solid;
+  border-color: black;
+  background-color: lightgrey;
+  border-radius: 7px;
+  padding: 5px;
 }
