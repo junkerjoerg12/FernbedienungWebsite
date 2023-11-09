@@ -1,7 +1,7 @@
 let neuerName;
 let ausfueheren = true;
 let umbenennen = false;
-let ausgewaehlterKnopf;
+let ausgewaehlterKnopf = document.getElementById("k0");
 
 let knoepfe = [
   document.getElementById("k0"),
@@ -23,30 +23,55 @@ let knoepfe = [
 ];
 document.getElementById("frame").value = ``;
 
-// document.getElementById("k1").style.color = "green";
-
+//Allen knöpfen wird eventlistener hinzugefügt
 for (let i = 0; i < knoepfe.length; i++) {
   knoepfe[i].addEventListener("click", knopfGedrueckt);
 }
 
 function knopfGedrueckt() {
-  ausgewaehlterKnopf = this;
+  knoepfeZuruecksetzen();
 
-  if (document.getElementById("knopfUmbenennen")) {
-    console.log(`umbenennen`);
-    this.innerText = neuerName;
-  } else if (document.getElementById("knopfAusfuehren")) {
-    console.log(`Ausführen`);
+  //Ausgewählter knopf wird hell umrandet
+  if (this !== ausgewaehlterKnopf) {
+    ausgewaehlterKnopf = this;
+    ausgewaehlterKnopf.style.borderColor = "white";
+    ausgewaehlterKnopf.style.backgroundColor = " white";
+  } else {
+    ausgewaehlterKnopf = null;
   }
 }
 
-document.getElementById("KnopfBestaetigen").onclick = function () {
-  if (umbenennen) {
-    neuerName = document.getElementById("frame").value;
+//Alle knöpfe werden wieder auf default css gesetzt
+function knoepfeZuruecksetzen() {
+  for (let i = 0; i < knoepfe.length; i++) {
+    knoepfe[i].style.backgroundColor = "lightgrey";
+    knoepfe[i].style.borderColor = "black";
   }
+}
+
+//knopf zur bestätigung der Aktion
+document.getElementById("knopfAusfuehren").onclick = function () {
+  console.log("Daten senden");
+  knoepfeZuruecksetzen();
+};
+
+//knopf um einen der Knöpfe umzubenennen
+document.getElementById("knopfUmbenennen").onclick = function () {
+  if (neuerName) {
+    ausgewaehlterKnopf.innerText = neuerName;
+    console.log(`Daten senden`);
+    knoepfeZuruecksetzen();
+    neuerName = ``;
+  }
+};
+
+//knopf um eingabe zu speichern
+document.getElementById("KnopfBestaetigen").onclick = function () {
+  neuerName = document.getElementById("frame").value;
   console.log(neuerName);
 };
 
+//knopf zum Eingabe löschen
 document.getElementById("knopfEingabeLoeschen").onclick = function () {
   document.getElementById("frame").value = ``;
 };

@@ -49,7 +49,7 @@ h1 {
   margin-bottom: 10px;
 }
 #knopfUmbenennen {
-  border-width: 3px;
+  border-width: 5px;
   border-style: solid;
   border-color: black;
   background-color: lightgray;
@@ -57,7 +57,7 @@ h1 {
   padding: 5px;
 }
 #knopfAusfuehren {
-  border-width: 3px;
+  border-width: 5px;
   border-style: solid;
   border-color: black;
   background-color: lightgrey;
