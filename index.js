@@ -87,7 +87,10 @@ document.getElementById("KnopfBestaetigen").onclick = function () {
 };
 
 //knopf zum Eingabe löschen
-document.getElementById("knopfEingabeLoeschen").onclick = function () {};
+document.getElementById("knopfEingabeLoeschen").onclick = function () {
+  neuerName = ``;
+  document.getElementById("frame").value = ``;
+};
 
 function datenToJSON(grund) {
   let datenArr = [];
