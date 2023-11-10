@@ -3,7 +3,7 @@ let ausfueheren = true;
 let umbenennen = false;
 let ausgewaehlterKnopf = document.getElementById("k0");
 //Hier noich richtiege url einsetzten
-const socket = new WebSocket("ws://javascript.info");
+// const socket = new WebSocket("ws://localhost:8082");
 
 let knoepfe = [
   document.getElementById("k0"),
@@ -30,13 +30,13 @@ for (let i = 0; i < knoepfe.length; i++) {
   knoepfe[i].addEventListener("click", knopfGedrueckt);
 }
 
-socket.addEventListener("open", () => {
-  console.log("Connected");
-});
+// socket.addEventListener("open", () => {
+//   console.log("Connected");
+// });
 
-socket.addEventListener("message", (e) => {
-  let daten = e;
-});
+// socket.addEventListener("message", (e) => {
+//   let daten = e;
+// });
 
 function knopfGedrueckt() {
   knoepfeZuruecksetzen();
@@ -61,17 +61,21 @@ function knoepfeZuruecksetzen() {
 
 //knopf zur bestätigung der Aktion
 document.getElementById("knopfAusfuehren").onclick = function () {
-  console.log("Daten senden");
-  datenSenden();
+  ausfueheren = true;
+  umbenennen = false;
+  datenToJSON("ausfuehren");
+  //datenSenden(datenToJSON("ausfuehren"));
   knoepfeZuruecksetzen();
 };
 
 //knopf um einen der Knöpfe umzubenennen
 document.getElementById("knopfUmbenennen").onclick = function () {
   if (neuerName) {
+    ausfueheren = false;
+    umbenennen = true;
     ausgewaehlterKnopf.innerText = neuerName;
-    console.log(`Daten senden`);
-    datenSenden();
+    datenToJSON("knoepfeUmbenennen");
+    // datenSenden(datenToJSON());
     knoepfeZuruecksetzen();
     neuerName = ``;
   }
@@ -80,42 +84,31 @@ document.getElementById("knopfUmbenennen").onclick = function () {
 //knopf um eingabe zu speichern
 document.getElementById("KnopfBestaetigen").onclick = function () {
   neuerName = document.getElementById("frame").value;
-  console.log(neuerName);
 };
 
 //knopf zum Eingabe löschen
 document.getElementById("knopfEingabeLoeschen").onclick = function () {};
 
-// function datenSenden(){
-
-//   console.log(knoepfe);
-
-//   let daten = JSON.stringify(knoepfe);
-//   // for (let i = 0; i < knoepfe.length; i++){
-//   //   JSON.stringify(knoepfe[i].innerText);
-//   // }
-//   // console.log(JSON.stringify(knoepfe));
-//   console.log(daten);
-// }
-
-function datenToJSON() {
-  let buttonDaten = [];
-
-  for (let i = 0; i < knoepfe.length; i++) {
-    let button = {
-      // id: knoepfe[i].id,
-      innerText: knoepfe[i].innerText,
-      //hintergrundFarbe: knoepfe[i].style.backgroundColor,
-      // randFarbe: knoepfe[i].style.borderColor,
-    };
-
-    buttonDaten.push(button);
+function datenToJSON(grund) {
+  let datenArr = [];
+  if (umbenennen) {
+    for (let i = 0; i < knoepfe.length; i++) {
+      let button = {
+        // id: knoepfe[i].id,
+        innerText: knoepfe[i].innerText,
+        //hintergrundFarbe: knoepfe[i].style.backgroundColor,
+        // randFarbe: knoepfe[i].style.borderColor,
+      };
+      datenArr.push(button);
+    }
   }
 
-  let daten = JSON.stringify(buttonDaten);
+  console.log(datenArr);
+  let daten = JSON.stringify({ grund, datenArr });
   console.log(daten);
+  return daten;
 }
 
-function datenSenden() {
-  socket.send(daten);
-}
+// function datenSenden() {
+//   socket.send(daten);
+// }
