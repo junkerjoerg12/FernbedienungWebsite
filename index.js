@@ -31,6 +31,7 @@ for (let i = 0; i < knoepfe.length; i++) {
 function knopfGedrueckt() {
   knoepfeZuruecksetzen();
 
+
   //Ausgewählter knopf wird hell umrandet
   if (this !== ausgewaehlterKnopf) {
     ausgewaehlterKnopf = this;
@@ -51,7 +52,9 @@ function knoepfeZuruecksetzen() {
 
 //knopf zur bestätigung der Aktion
 document.getElementById("knopfAusfuehren").onclick = function () {
+  
   console.log("Daten senden");
+  datenSenden();
   knoepfeZuruecksetzen();
 };
 
@@ -60,6 +63,7 @@ document.getElementById("knopfUmbenennen").onclick = function () {
   if (neuerName) {
     ausgewaehlterKnopf.innerText = neuerName;
     console.log(`Daten senden`);
+    datenSenden();
     knoepfeZuruecksetzen();
     neuerName = ``;
   }
@@ -73,5 +77,35 @@ document.getElementById("KnopfBestaetigen").onclick = function () {
 
 //knopf zum Eingabe löschen
 document.getElementById("knopfEingabeLoeschen").onclick = function () {
-  document.getElementById("frame").value = ``;
 };
+
+// function datenSenden(){
+  
+//   console.log(knoepfe);
+
+//   let daten = JSON.stringify(knoepfe);
+//   // for (let i = 0; i < knoepfe.length; i++){
+//   //   JSON.stringify(knoepfe[i].innerText); 
+//   // }
+//   // console.log(JSON.stringify(knoepfe));
+//   console.log(daten);
+// }
+
+function datenSenden() {
+  let buttonDaten = [];
+
+  for (let i = 0; i < knoepfe.length; i++) {
+    let button = {
+      // id: knoepfe[i].id,
+      innerText: knoepfe[i].innerText,
+      //hintergrundFarbe: knoepfe[i].style.backgroundColor,
+      // randFarbe: knoepfe[i].style.borderColor,
+    };
+
+    buttonDaten.push(button);
+  }
+
+  let daten = JSON.stringify(buttonDaten);
+  console.log(daten);
+}
+
