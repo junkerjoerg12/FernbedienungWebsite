@@ -2,6 +2,7 @@ let neuerName;
 let ausfueheren = true;
 let umbenennen = false;
 let ausgewaehlterKnopf = document.getElementById("k0");
+let socket = new WebSocket("ws://javascript.info");
 
 let knoepfe = [
   document.getElementById("k0"),
