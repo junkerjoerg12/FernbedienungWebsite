@@ -2,7 +2,8 @@ let neuerName;
 let ausfueheren = true;
 let umbenennen = false;
 let ausgewaehlterKnopf = document.getElementById("k0");
-let socket = new WebSocket("ws://javascript.info");
+//Hier noich richtiege url einsetzten
+const socket = new WebSocket("ws://javascript.info");
 
 let knoepfe = [
   document.getElementById("k0"),
@@ -29,9 +30,16 @@ for (let i = 0; i < knoepfe.length; i++) {
   knoepfe[i].addEventListener("click", knopfGedrueckt);
 }
 
+socket.addEventListener("open", () => {
+  console.log("Connected");
+});
+
+socket.addEventListener("message", (e) => {
+  let daten = e;
+});
+
 function knopfGedrueckt() {
   knoepfeZuruecksetzen();
-
 
   //Ausgewählter knopf wird hell umrandet
   if (this !== ausgewaehlterKnopf) {
@@ -53,7 +61,6 @@ function knoepfeZuruecksetzen() {
 
 //knopf zur bestätigung der Aktion
 document.getElementById("knopfAusfuehren").onclick = function () {
-  
   console.log("Daten senden");
   datenSenden();
   knoepfeZuruecksetzen();
@@ -77,22 +84,21 @@ document.getElementById("KnopfBestaetigen").onclick = function () {
 };
 
 //knopf zum Eingabe löschen
-document.getElementById("knopfEingabeLoeschen").onclick = function () {
-};
+document.getElementById("knopfEingabeLoeschen").onclick = function () {};
 
 // function datenSenden(){
-  
+
 //   console.log(knoepfe);
 
 //   let daten = JSON.stringify(knoepfe);
 //   // for (let i = 0; i < knoepfe.length; i++){
-//   //   JSON.stringify(knoepfe[i].innerText); 
+//   //   JSON.stringify(knoepfe[i].innerText);
 //   // }
 //   // console.log(JSON.stringify(knoepfe));
 //   console.log(daten);
 // }
 
-function datenSenden() {
+function datenToJSON() {
   let buttonDaten = [];
 
   for (let i = 0; i < knoepfe.length; i++) {
@@ -110,3 +116,6 @@ function datenSenden() {
   console.log(daten);
 }
 
+function datenSenden() {
+  socket.send(daten);
+}
