@@ -1,6 +1,7 @@
 let neuerName;
 let ausfueheren = true;
 let umbenennen = false;
+let geraetAngewaehlt = false;
 let ausgewaehlterKnopf = document.getElementById("k0");
 //Hier noich richtiege url einsetzten
 // const socket = new WebSocket("ws://localhost:8082");
@@ -57,6 +58,8 @@ function knoepfeZuruecksetzen() {
     knoepfe[i].style.backgroundColor = "lightgrey";
     knoepfe[i].style.borderColor = "black";
   }
+  document.getElementById("knopfAusfuehren").style.backgroundColor =
+    "lightgrey";
 }
 
 //knopf zur bestätigung der Aktion
@@ -92,6 +95,28 @@ document.getElementById("knopfEingabeLoeschen").onclick = function () {
   document.getElementById("frame").value = ``;
 };
 
+document.getElementById("geraet1").onclick = function () {
+  ausfuehrenAusgrauen();
+};
+
+document.getElementById("geraet2").onclick = function () {
+  ausfuehrenAusgrauen();
+};
+
+document.getElementById("geraet3").onclick = function () {
+  ausfuehrenAusgrauen();
+};
+
+document.getElementById("geraet4").onclick = function () {
+  ausfuehrenAusgrauen();
+};
+
+function ausfuehrenAusgrauen() {
+  knoepfeZuruecksetzen();
+  document.getElementById("knopfAusfuehren").style.backgroundColor = "grey";
+  geraetAngewaehlt = true;
+}
+
 function datenToJSON(grund) {
   let datenArr = [];
   if (umbenennen) {
@@ -105,7 +130,6 @@ function datenToJSON(grund) {
       datenArr.push(button);
     }
   }
-
   console.log(datenArr);
   let daten = JSON.stringify({ grund, datenArr });
   console.log(daten);
