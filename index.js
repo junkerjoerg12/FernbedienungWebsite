@@ -40,6 +40,7 @@ for (let i = 0; i < knoepfe.length; i++) {
 // });
 
 function knopfGedrueckt() {
+  geraetAngewaehlt = false;
   knoepfeZuruecksetzen();
 
   //Ausgewählter knopf wird hell umrandet
@@ -64,11 +65,13 @@ function knoepfeZuruecksetzen() {
 
 //knopf zur bestätigung der Aktion
 document.getElementById("knopfAusfuehren").onclick = function () {
-  ausfueheren = true;
-  umbenennen = false;
-  datenToJSON("ausfuehren");
-  //datenSenden(datenToJSON("ausfuehren"));
-  knoepfeZuruecksetzen();
+  if (!geraetAngewaehlt) {
+    ausfueheren = true;
+    umbenennen = false;
+    datenToJSON("ausfuehren");
+    //datenSenden(datenToJSON("ausfuehren"));
+    knoepfeZuruecksetzen();
+  }
 };
 
 //knopf um einen der Knöpfe umzubenennen
@@ -118,6 +121,7 @@ function ausfuehrenAusgrauen() {
 }
 
 function datenToJSON(grund) {
+  console.log("daten werden zu JAson verarbeitet");
   let datenArr = [];
   if (umbenennen) {
     for (let i = 0; i < knoepfe.length; i++) {
