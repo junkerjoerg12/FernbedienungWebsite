@@ -69,6 +69,8 @@ function knoepfeZuruecksetzen() {
 //knopf zur bestätigung der Aktion
 document.getElementById("knopfAusfuehren").onclick = function () {
   if (!loggetIn) {
+    console.log("Binich das?");
+
     statusbarAnzeigeAendern(`Bitte erst einloggen!`);
   } else if (!geraetAngewaehlt) {
     ausfueheren = true;
@@ -76,8 +78,12 @@ document.getElementById("knopfAusfuehren").onclick = function () {
     datenToJSON("ausfuehren");
     //datenSenden(datenToJSON("ausfuehren"));
     knoepfeZuruecksetzen();
+    setTimeout(statusbarAnzeigeAuswaehlen, 3000);
+    console.log("Binich das?1");
     statusbarAnzeigeAendern(`Aktion ausgeführt`);
   } else if (geraetAngewaehlt) {
+    console.log("Binich das?2");
+
     statusbarAnzeigeAendern(
       `Ein Gerät kann nicht ausgeführt werden, es muss eine Aktion ausgewählt sein!`
     );
@@ -86,6 +92,9 @@ document.getElementById("knopfAusfuehren").onclick = function () {
 
 function statusbarAnzeigeAendern(anzeige) {
   document.getElementById("Statusanzeige").innerHTML = anzeige;
+}
+function statusbarAnzeigeAuswaehlen() {
+  document.getElementById("Statusanzeige").innerHTML = `Aktion auswählen`;
 }
 
 //knopf um einen der Knöpfe umzubenennen
@@ -137,6 +146,7 @@ document.getElementById("login").onclick = function () {
   if (toHash(pw) === passwort) {
     loggetIn = true;
     statusbarAnzeigeAendern(`Eingeloggt`);
+    console.log("Binich das?4");
   }
   document.getElementById("login").style.visibility = `hidden`;
 
