@@ -68,18 +68,25 @@ function knoepfeZuruecksetzen() {
 
 //knopf zur bestätigung der Aktion
 document.getElementById("knopfAusfuehren").onclick = function () {
-  if (!geraetAngewaehlt) {
+  if (!loggetIn) {
+    statusbarAnzeigeAendern(`Bitte erst einloggen!`);
+  } else if (!geraetAngewaehlt) {
     ausfueheren = true;
     umbenennen = false;
     datenToJSON("ausfuehren");
     //datenSenden(datenToJSON("ausfuehren"));
     knoepfeZuruecksetzen();
+    statusbarAnzeigeAendern(`Aktion ausgeführt`);
   } else if (geraetAngewaehlt) {
-    document.getElementById(
-      "Statusanzeige"
-    ).innerHTML = `Ein Gerät kann nicht ausgeführt werden, es muss eine Aktion ausgewählt sein!`;
+    statusbarAnzeigeAendern(
+      `Ein Gerät kann nicht ausgeführt werden, es muss eine Aktion ausgewählt sein!`
+    );
   }
 };
+
+function statusbarAnzeigeAendern(anzeige) {
+  document.getElementById("Statusanzeige").innerHTML = anzeige;
+}
 
 //knopf um einen der Knöpfe umzubenennen
 document.getElementById("knopfUmbenennen").onclick = function () {
@@ -129,7 +136,10 @@ document.getElementById("login").onclick = function () {
   let pw = window.prompt("Bitte passwoet eingeben");
   if (toHash(pw) === passwort) {
     loggetIn = true;
+    statusbarAnzeigeAendern(`Eingeloggt`);
   }
+  document.getElementById("login").style.visibility = `hidden`;
+
   console.log(loggetIn);
 };
 
@@ -165,7 +175,7 @@ function datenToJSON(grund) {
 function datenVerarbeiten(daten) {
   let obj = JSON.parse(daten);
 
-  if (obj.grund === knoepfeUmbenennen) {
+  if (obj.grund === "knoepfeUmbenennen") {
     //do something
   }
 }
