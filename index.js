@@ -36,7 +36,8 @@ for (let i = 0; i < knoepfe.length; i++) {
 // });
 
 // socket.addEventListener("message", (e) => {
-//   let daten = e;
+//
+//   datenVerarbeiten(e);
 // });
 
 function knopfGedrueckt() {
@@ -71,6 +72,10 @@ document.getElementById("knopfAusfuehren").onclick = function () {
     datenToJSON("ausfuehren");
     //datenSenden(datenToJSON("ausfuehren"));
     knoepfeZuruecksetzen();
+  } else if (geraetAngewaehlt) {
+    document.getElementById(
+      "Statusanzeige"
+    ).innerHTML = `Ein Gerät kann nicht ausgeführt werden, es muss eine Aktion ausgewählt sein!`;
   }
 };
 
@@ -84,6 +89,10 @@ document.getElementById("knopfUmbenennen").onclick = function () {
     // datenSenden(datenToJSON());
     knoepfeZuruecksetzen();
     neuerName = ``;
+  } else {
+    document.getElementById(
+      "Statusanzeige"
+    ).innerHTML = `Erst einen neuen namen eingeben`;
   }
 };
 
@@ -121,7 +130,6 @@ function ausfuehrenAusgrauen() {
 }
 
 function datenToJSON(grund) {
-  console.log("daten werden zu JAson verarbeitet");
   let datenArr = [];
   if (umbenennen) {
     for (let i = 0; i < knoepfe.length; i++) {
@@ -143,3 +151,11 @@ function datenToJSON(grund) {
 // function datenSenden() {
 //   socket.send(daten);
 // }
+
+function datenVerarbeiten(daten) {
+  let obj = JSON.parse(daten);
+
+  if (obj.grund === knoepfeUmbenennen) {
+    //do something
+  }
+}
