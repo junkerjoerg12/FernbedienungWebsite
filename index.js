@@ -69,8 +69,6 @@ function knoepfeZuruecksetzen() {
 //knopf zur bestätigung der Aktion
 document.getElementById("knopfAusfuehren").onclick = function () {
   if (!loggetIn) {
-    console.log("Binich das?");
-
     statusbarAnzeigeAendern(`Bitte erst einloggen!`);
   } else if (!geraetAngewaehlt) {
     ausfueheren = true;
@@ -79,11 +77,8 @@ document.getElementById("knopfAusfuehren").onclick = function () {
     //datenSenden(datenToJSON("ausfuehren"));
     knoepfeZuruecksetzen();
     setTimeout(statusbarAnzeigeAuswaehlen, 3000);
-    console.log("Binich das?1");
     statusbarAnzeigeAendern(`Aktion ausgeführt`);
   } else if (geraetAngewaehlt) {
-    console.log("Binich das?2");
-
     statusbarAnzeigeAendern(
       `Ein Gerät kann nicht ausgeführt werden, es muss eine Aktion ausgewählt sein!`
     );
@@ -107,10 +102,9 @@ document.getElementById("knopfUmbenennen").onclick = function () {
     // datenSenden(datenToJSON());
     knoepfeZuruecksetzen();
     neuerName = ``;
+    document.getElementById("frame").value = ``;
   } else {
-    document.getElementById(
-      "Statusanzeige"
-    ).innerHTML = `Erst einen neuen namen eingeben`;
+    statusbarAnzeigeAendern(`Erst einen neuen namen eingeben`);
   }
 };
 
@@ -146,7 +140,6 @@ document.getElementById("login").onclick = function () {
   if (toHash(pw) === passwort) {
     loggetIn = true;
     statusbarAnzeigeAendern(`Eingeloggt`);
-    console.log("Binich das?4");
   }
   document.getElementById("login").style.visibility = `hidden`;
 
@@ -186,7 +179,9 @@ function datenVerarbeiten(daten) {
   let obj = JSON.parse(daten);
 
   if (obj.grund === "knoepfeUmbenennen") {
-    //do something
+    for (let i = 0; i < obj.datenArr.length; i++) {
+      knoepfe[i].innerText = obj.datenArr[i];
+    }
   }
 }
 
