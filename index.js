@@ -2,7 +2,9 @@ let neuerName;
 let ausfueheren = true;
 let umbenennen = false;
 let geraetAngewaehlt = false;
+let loggetIn = false;
 let ausgewaehlterKnopf = document.getElementById("k0");
+let passwort = 1216985771;
 //Hier noich richtiege url einsetzten
 // const socket = new WebSocket("ws://localhost:8082");
 
@@ -123,6 +125,14 @@ document.getElementById("geraet4").onclick = function () {
   ausfuehrenAusgrauen();
 };
 
+document.getElementById("login").onclick = function () {
+  let pw = window.prompt("Bitte passwoet eingeben");
+  if (toHash(pw) === passwort) {
+    loggetIn = true;
+  }
+  console.log(loggetIn);
+};
+
 function ausfuehrenAusgrauen() {
   knoepfeZuruecksetzen();
   document.getElementById("knopfAusfuehren").style.backgroundColor = "grey";
@@ -158,4 +168,17 @@ function datenVerarbeiten(daten) {
   if (obj.grund === knoepfeUmbenennen) {
     //do something
   }
+}
+
+function toHash(string) {
+  //set variable hash as 0
+  var hash = 0;
+  // if the length of the string is 0, return 0
+  if (string.length == 0) return hash;
+  for (i = 0; i < string.length; i++) {
+    ch = string.charCodeAt(i);
+    hash = (hash << 5) - hash + ch;
+    hash = hash & hash;
+  }
+  return hash;
 }
