@@ -73,11 +73,10 @@ document.getElementById("knopfAusfuehren").onclick = function () {
   } else if (!geraetAngewaehlt) {
     ausfueheren = true;
     umbenennen = false;
-    datenToJSON("ausfuehren");
     datenSenden(datenToJSON("ausfuehren"));
     knoepfeZuruecksetzen();
-    // setTimeout(statusbarAnzeigeAuswaehlen, 3000);
-    // statusbarAnzeigeAendern(`Aktion ausgeführt`);
+    setTimeout(statusbarAnzeigeAuswaehlen, 3000);
+    statusbarAnzeigeAendern(`Aktion ausgeführt`);
   } else if (geraetAngewaehlt) {
     statusbarAnzeigeAendern(
       `Ein Gerät kann nicht ausgeführt werden, es muss eine Aktion ausgewählt sein!`
@@ -176,6 +175,12 @@ function datenToJSON(grund) {
       };
       datenArr.push(button);
     }
+  } else if (ausfueheren) {
+    console.log(ausgewaehlterKnopf);
+    let button = {
+      auszufuehrenderKnopf: ausgewaehlterKnopf.innerText,
+    };
+    datenArr.push(button);
   }
   console.log(datenArr);
   let daten = JSON.stringify({ grund, datenArr });
@@ -185,8 +190,8 @@ function datenToJSON(grund) {
 
 function datenSenden(daten) {
   statusbarAnzeigeAendern(`Gesendet`);
-  console.log(`Sende Daten`);
   socket.send(daten);
+  console.log(`Sende Daten`);
 }
 
 function datenVerarbeiten(daten) {
