@@ -2,11 +2,11 @@ let neuerName;
 let ausfueheren = true;
 let umbenennen = false;
 let geraetAngewaehlt = false;
-let loggetIn = false;
+let loggetIn = true; //wieder zurückändern
 let ausgewaehlterKnopf = document.getElementById("k0");
 let passwort = 1216985771;
 //Hier noich richtiege url einsetzten
-// const socket = new WebSocket("ws://localhost:8082");
+const socket = new WebSocket(`ws://` + window.location.hostname + `:81`);
 
 let knoepfe = [
   document.getElementById("k0"),
@@ -33,14 +33,14 @@ for (let i = 0; i < knoepfe.length; i++) {
   knoepfe[i].addEventListener("click", knopfGedrueckt);
 }
 
-// socket.addEventListener("open", () => {
-//   console.log("Connected");
-// });
+socket.addEventListener("open", () => {
+  console.log("Connected");
+});
 
-// socket.addEventListener("message", (e) => {
-//
-//   datenVerarbeiten(e);
-// });
+socket.onmessage = function (event) {
+  conole.log("HAllo, bitte");
+  datenVerarbeiten(event);
+};
 
 function knopfGedrueckt() {
   geraetAngewaehlt = false;
@@ -74,10 +74,10 @@ document.getElementById("knopfAusfuehren").onclick = function () {
     ausfueheren = true;
     umbenennen = false;
     datenToJSON("ausfuehren");
-    //datenSenden(datenToJSON("ausfuehren"));
+    datenSenden(datenToJSON("ausfuehren"));
     knoepfeZuruecksetzen();
-    setTimeout(statusbarAnzeigeAuswaehlen, 3000);
-    statusbarAnzeigeAendern(`Aktion ausgeführt`);
+    // setTimeout(statusbarAnzeigeAuswaehlen, 3000);
+    // statusbarAnzeigeAendern(`Aktion ausgeführt`);
   } else if (geraetAngewaehlt) {
     statusbarAnzeigeAendern(
       `Ein Gerät kann nicht ausgeführt werden, es muss eine Aktion ausgewählt sein!`
@@ -94,17 +94,20 @@ function statusbarAnzeigeAuswaehlen() {
 
 //knopf um einen der Knöpfe umzubenennen
 document.getElementById("knopfUmbenennen").onclick = function () {
-  if (neuerName) {
-    ausfueheren = false;
-    umbenennen = true;
-    ausgewaehlterKnopf.innerText = neuerName;
-    datenToJSON("knoepfeUmbenennen");
-    // datenSenden(datenToJSON());
-    knoepfeZuruecksetzen();
-    neuerName = ``;
-    document.getElementById("frame").value = ``;
+  if (loggetIn === true) {
+    if (neuerName) {
+      ausfueheren = false;
+      umbenennen = true;
+      ausgewaehlterKnopf.innerText = neuerName;
+      datenSenden(datenToJSON("knoepfeUmbenennen"));
+      knoepfeZuruecksetzen();
+      neuerName = ``;
+      document.getElementById("frame").value = ``;
+    } else {
+      statusbarAnzeigeAendern(`Erst einen neuen namen eingeben`);
+    }
   } else {
-    statusbarAnzeigeAendern(`Erst einen neuen namen eingeben`);
+    statusbarAnzeigeAendern(`Bitte erst einloggen`);
   }
 };
 
@@ -136,14 +139,23 @@ document.getElementById("geraet4").onclick = function () {
 };
 
 document.getElementById("login").onclick = function () {
-  let pw = window.prompt("Bitte passwoet eingeben");
-  if (toHash(pw) === passwort) {
-    loggetIn = true;
-    statusbarAnzeigeAendern(`Eingeloggt`);
+  if (loggetIn === false) {
+    let pw = window.prompt("Passwort");
+    if (toHash(pw) === passwort) {
+      loggetIn = true;
+      statusbarAnzeigeAendern(`Eingeloggt`);
+      //document.getElementById("login").style.visibility = `hidden`;
+      document.getElementById("login").innerText = "  Logout  ";
+      document.getElementById("login").style.backgroundColor = "red";
+    } else {
+      statusbarAnzeigeAendern(`Falsches Passwort`);
+    }
+  } else {
+    loggetIn = false;
+    statusbarAnzeigeAendern(`Ausgeloggt`);
+    document.getElementById("login").innerText = "  Login  ";
+    document.getElementById("login").style.backgroundColor = "green";
   }
-  document.getElementById("login").style.visibility = `hidden`;
-
-  console.log(loggetIn);
 };
 
 function ausfuehrenAusgrauen() {
@@ -171,18 +183,22 @@ function datenToJSON(grund) {
   return daten;
 }
 
-// function datenSenden() {
-//   socket.send(daten);
-// }
+function datenSenden(daten) {
+  statusbarAnzeigeAendern(`Gesendet`);
+  console.log(`Sende Daten`);
+  socket.send(daten);
+}
 
 function datenVerarbeiten(daten) {
-  let obj = JSON.parse(daten);
+  console.log(`Daten Empfangen`);
 
-  if (obj.grund === "knoepfeUmbenennen") {
-    for (let i = 0; i < obj.datenArr.length; i++) {
-      knoepfe[i].innerText = obj.datenArr[i];
-    }
-  }
+  // let obj = JSON.parse(daten);
+
+  // if (obj.grund === "knoepfeUmbenennen") {
+  //   for (let i = 0; i < obj.datenArr.length; i++) {
+  //     knoepfe[i].innerText = obj.datenArr[i];
+  //   }
+  // }
 }
 
 function toHash(string) {
