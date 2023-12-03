@@ -1,12 +1,16 @@
 let neuerName;
+
 let ausfueheren = true;
 let umbenennen = false;
+
 let geraetAngewaehlt = false;
 let loggetIn = true; //wieder zurückändern
+
 let ausgewaehlterKnopf = document.getElementById("k0");
+ausgewaehlterKnopf = null;
 let passwort = 1216985771;
-//Hier noich richtiege url einsetzten
-const socket = new WebSocket(`ws://` + window.location.hostname + `:81`);
+
+let socket = new WebSocket("ws://" + window.location.hostname + ":81/");
 
 let knoepfe = [
   document.getElementById("k0"),
@@ -26,26 +30,54 @@ let knoepfe = [
   document.getElementById("k14"),
   document.getElementById("k15"),
 ];
-document.getElementById("frame").value = ``;
 
 //Allen knöpfen wird eventlistener hinzugefügt
 for (let i = 0; i < knoepfe.length; i++) {
   knoepfe[i].addEventListener("click", knopfGedrueckt);
 }
 
+let geraete = [
+  document.getElementById("geraet1"),
+  document.getElementById("geraet2"),
+  document.getElementById("geraet3"),
+  document.getElementById("geraet4"),
+];
+
+for (let i = 0; i < geraete.length; i++) {
+  geraete[i].addEventListener("click", knopfGedrueckt);
+}
+
+document.getElementById("frame").value = ``;
+
+//Knöpfe, die das Gerät anzeigen erhalten click Lilstener
+document.getElementById("geraet1").onclick = function () {
+  ausfuehrenAusgrauen();
+  ausgewaehlterKnopf = document.getElementById("geraet1");
+};
+
 socket.addEventListener("open", () => {
   console.log("Connected");
 });
 
 socket.onmessage = function (event) {
-  conole.log("HAllo, bitte");
+  console.log("HAllo, bitte");
+  statusbarAnzeigeAendern(`Das würde ich mir wünschen`);
   datenVerarbeiten(event);
 };
 
 function knopfGedrueckt() {
-  geraetAngewaehlt = false;
-  knoepfeZuruecksetzen();
+  //aus mir unerfindlichen Gründen wird das Ertse Gerät beim anklicken nicht hell umrandet, obwohl das bei console.log da aber steht
+  console.log(`Knopf gedrückt`);
+  if (knoepfe.includes(this)) {
+    geraetAngewaehlt = false;
+    console.log("knöpfe");
+  } else if (geraete.includes(this)) {
+    geraetAngewaehlt = true;
+    ausfuehrenAusgrauen();
+    console.log(this);
+  }
 
+  knoepfeZuruecksetzen();
   //Ausgewählter knopf wird hell umrandet
   if (this !== ausgewaehlterKnopf) {
     ausgewaehlterKnopf = this;
@@ -54,6 +86,7 @@ function knopfGedrueckt() {
   } else {
     ausgewaehlterKnopf = null;
   }
+  console.log(this);
 }
 
 //Alle knöpfe werden wieder auf default css gesetzt
@@ -62,8 +95,14 @@ function knoepfeZuruecksetzen() {
     knoepfe[i].style.backgroundColor = "lightgrey";
     knoepfe[i].style.borderColor = "black";
   }
-  document.getElementById("knopfAusfuehren").style.backgroundColor =
-    "lightgrey";
+  for (let i = 0; i < geraete.length; i++) {
+    geraete[i].style.backgroundColor = "lightgrey";
+    geraete[i].style.borderColor = "black";
+  }
+  if (!geraetAngewaehlt) {
+    document.getElementById("knopfAusfuehren").style.backgroundColor =
+      "lightgrey";
+  }
 }
 
 //knopf zur bestätigung der Aktion
@@ -73,7 +112,7 @@ document.getElementById("knopfAusfuehren").onclick = function () {
   } else if (!geraetAngewaehlt) {
     ausfueheren = true;
     umbenennen = false;
-    datenSenden(datenToJSON("ausfuehren"));
+    datenSenden(datenToJSON("ausfuehren", let));
     knoepfeZuruecksetzen();
     setTimeout(statusbarAnzeigeAuswaehlen, 3000);
     statusbarAnzeigeAendern(`Aktion ausgeführt`);
@@ -95,10 +134,19 @@ function statusbarAnzeigeAuswaehlen() {
 document.getElementById("knopfUmbenennen").onclick = function () {
   if (loggetIn === true) {
     if (neuerName) {
+      let grund;
+      let toBeSend;
+      if (geraetAngewaehlt) {
+        grund = "geraetUmbenennen";
+        toBeSend = geraete;
+      } else {
+        grund = "knoepfeUmbenennen";
+        toBeSend = knoepfe;
+      }
       ausfueheren = false;
       umbenennen = true;
       ausgewaehlterKnopf.innerText = neuerName;
-      datenSenden(datenToJSON("knoepfeUmbenennen"));
+      datenSenden(datenToJSON(grund, toBeSend));
       knoepfeZuruecksetzen();
       neuerName = ``;
       document.getElementById("frame").value = ``;
@@ -119,22 +167,6 @@ document.getElementById("KnopfBestaetigen").onclick = function () {
 document.getElementById("knopfEingabeLoeschen").onclick = function () {
   neuerName = ``;
   document.getElementById("frame").value = ``;
-};
-
-document.getElementById("geraet1").onclick = function () {
-  ausfuehrenAusgrauen();
-};
-
-document.getElementById("geraet2").onclick = function () {
-  ausfuehrenAusgrauen();
-};
-
-document.getElementById("geraet3").onclick = function () {
-  ausfuehrenAusgrauen();
-};
-
-document.getElementById("geraet4").onclick = function () {
-  ausfuehrenAusgrauen();
 };
 
 document.getElementById("login").onclick = function () {
@@ -163,15 +195,12 @@ function ausfuehrenAusgrauen() {
   geraetAngewaehlt = true;
 }
 
-function datenToJSON(grund) {
+function datenToJSON(grund, arr) {
   let datenArr = [];
   if (umbenennen) {
-    for (let i = 0; i < knoepfe.length; i++) {
+    for (let i = 0; i < arr.length; i++) {
       let button = {
-        // id: knoepfe[i].id,
-        innerText: knoepfe[i].innerText,
-        //hintergrundFarbe: knoepfe[i].style.backgroundColor,
-        // randFarbe: knoepfe[i].style.borderColor,
+        innerText: arr[i].innerText,
       };
       datenArr.push(button);
     }
