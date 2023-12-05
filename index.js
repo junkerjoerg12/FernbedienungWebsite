@@ -36,6 +36,7 @@ for (let i = 0; i < knoepfe.length; i++) {
   knoepfe[i].addEventListener("click", knopfGedrueckt);
 }
 
+// Alle knöpfe, die geräte dartellen weerden in ienem Array gespeichert
 let geraete = [
   document.getElementById("geraet1"),
   document.getElementById("geraet2"),
@@ -43,6 +44,7 @@ let geraete = [
   document.getElementById("geraet4"),
 ];
 
+// allen geräten wird eventlistener hinzugefügt
 for (let i = 0; i < geraete.length; i++) {
   geraete[i].addEventListener("click", knopfGedrueckt);
 }
@@ -60,8 +62,6 @@ socket.addEventListener("open", () => {
 });
 
 socket.onmessage = function (event) {
-  console.log("HAllo, bitte");
-  // statusbarAnzeigeAendern(`Das würde ich mir wünschen`);
   datenVerarbeiten(event);
 };
 
@@ -170,13 +170,13 @@ document.getElementById("knopfEingabeLoeschen").onclick = function () {
   document.getElementById("frame").value = ``;
 };
 
+//login
 document.getElementById("login").onclick = function () {
   if (loggetIn === false) {
     let pw = window.prompt("Passwort");
     if (toHash(pw) === passwort) {
       loggetIn = true;
       statusbarAnzeigeAendern(`Eingeloggt`);
-      //document.getElementById("login").style.visibility = `hidden`;
       document.getElementById("login").innerText = "  Logout  ";
       document.getElementById("login").style.backgroundColor = "red";
     } else {
@@ -190,12 +190,14 @@ document.getElementById("login").onclick = function () {
   }
 };
 
+//graut den Knopf "Ausfähren" aus um zu signalisieren, dass er nicht genutzt weder kann
 function ausfuehrenAusgrauen() {
   knoepfeZuruecksetzen();
   document.getElementById("knopfAusfuehren").style.backgroundColor = "grey";
   geraetAngewaehlt = true;
 }
 
+//Konveriert zu versendende daten zu einer JASON, übergeben wired der Grund für die Sendung(knopf umbenannt etc.) und die Daten in ienem Array
 function datenToJSON(grund, arr) {
   let datenArr = [];
   if (umbenennen) {
@@ -218,32 +220,28 @@ function datenToJSON(grund, arr) {
   return daten;
 }
 
+// Sendet die daten als JSON an den ESP
 function datenSenden(daten) {
   statusbarAnzeigeAendern(`Gesendet`);
   socket.send(daten);
   console.log(`Sende Daten`);
 }
 
+//soll ampangene daten weiterverarbeiten, bisher nur Beispielcode
 function datenVerarbeiten(daten) {
   console.log(`Daten Empfangen`);
 
-  // statusbarAnzeigeAendern(daten);
-
-  console.log(daten);
-  console.log(typeof daten); //ist ien ojekt
-
-  let althen = JSON.stringify(daten);
-  althen = althen.toString();
-
-  console.log("ALs Objekt: " + althen);
-
-  // if (obj.grund === "knoepfeUmbenennen") {
-  //   for (let i = 0; i < obj.datenArr.length; i++) {
-  //     knoepfe[i].innerText = obj.datenArr[i];
-  //   }
-  // }
+  console.log("Event: " + daten);
+  var obj = JSON.parse(daten.data);
+  console.log("obj: " + obj);
+  console.log("obj.datenArr" + obj.datenArr);
+  console.log("obj.grund" + obj.grund);
+  for (let i = 0; i < obj.datenArr.length; i++) {
+    console.log(obj.datenArr[i]["!"]);
+  }
 }
 
+// verschlüsselt da Pw
 function toHash(string) {
   //set variable hash as 0
   var hash = 0;
