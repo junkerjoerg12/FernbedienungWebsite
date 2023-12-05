@@ -61,7 +61,7 @@ socket.addEventListener("open", () => {
 
 socket.onmessage = function (event) {
   console.log("HAllo, bitte");
-  statusbarAnzeigeAendern(`Das würde ich mir wünschen`);
+  // statusbarAnzeigeAendern(`Das würde ich mir wünschen`);
   datenVerarbeiten(event);
 };
 
@@ -124,6 +124,7 @@ document.getElementById("knopfAusfuehren").onclick = function () {
 };
 
 function statusbarAnzeigeAendern(anzeige) {
+  console.log("statusAnzeigeAender wurde aufgerufen");
   document.getElementById("Statusanzeige").innerHTML = anzeige;
 }
 function statusbarAnzeigeAuswaehlen() {
@@ -226,7 +227,15 @@ function datenSenden(daten) {
 function datenVerarbeiten(daten) {
   console.log(`Daten Empfangen`);
 
-  // let obj = JSON.parse(daten);
+  // statusbarAnzeigeAendern(daten);
+
+  console.log(daten);
+  console.log(typeof daten); //ist ien ojekt
+
+  let althen = JSON.stringify(daten);
+  althen = althen.toString();
+
+  console.log("ALs Objekt: " + althen);
 
   // if (obj.grund === "knoepfeUmbenennen") {
   //   for (let i = 0; i < obj.datenArr.length; i++) {
